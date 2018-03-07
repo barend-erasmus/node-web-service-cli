@@ -4,6 +4,7 @@ import * as changeCase from 'change-case';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as handlebars from 'handlebars';
+import * as mkdirp from 'mkdirp';
 
 (async () => {
     const argv = yargs
@@ -34,11 +35,11 @@ import * as handlebars from 'handlebars';
 
     const gitHubUrl = argv.gitHubUrl;
 
-    const absolutePath = path.join(__dirname, `./../src/templates/version-${templateVersion}`);
+    const absoluteDirecoryPath = path.join(__dirname, `./../src/templates/version-${templateVersion}`);
 
-    const destinationPath = path.normalize(`D:/git/barend-erasmus/node-web-service-cli`);
+    const destinationDirectoryPath = path.normalize(`D:/git/barend-erasmus/node-web-service-cli/test`);
 
-    const files = await readdir(absolutePath);
+    const files = await readdir(absoluteDirecoryPath);
 
     for (const file of files) {
 
@@ -54,10 +55,16 @@ import * as handlebars from 'handlebars';
 
         const result = compiledTemplate(model);
 
-        const relativePath = path.relative(absolutePath, file);
+        const relativePath = path.relative(absoluteDirecoryPath, file);
 
-        console.log(path.join(destinationPath, relativePath));
+        const destinationFilePath: string = path.join(destinationDirectoryPath, relativePath);
 
-        // fs.writeFileSync(path.join(destinationPath, relativePath), result);
+        const destinationFileDirectoryPath: string = path.dirname(destinationFilePath);
+
+        if (!fs.existsSync(destinationFileDirectoryPath)) {
+            mkdirp.sync(destinationFileDirectoryPath);
+        }
+
+         fs.writeFileSync(destinationFilePath, result);
     }
 })();

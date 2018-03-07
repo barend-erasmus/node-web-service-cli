@@ -15,10 +15,6 @@ export class UserService {
     public async find(userName: string): Promise<User> {
         const user: User = await this.userRepository.findByUserName(userName);
 
-        if (!user) {
-            return null;
-        }
-
         return user;
     }
 }

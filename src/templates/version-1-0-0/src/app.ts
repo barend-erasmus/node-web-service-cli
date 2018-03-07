@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(cors());
 
-app.route('/api/user', AuthenticationMiddleware.shouldBeAuthenticated).get(UserRouter.get);
+app.route('/api/user').get(AuthenticationMiddleware.shouldBeAuthenticated, UserRouter.get);
 
 app.listen(argv.port || 3000, () => {
     console.log(`listening on port ${argv.port || 3000}`);

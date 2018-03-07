@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "description": "Generate Node.js Web Services (Micro, Macro, API)",
   "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
   "dependencies": {
     "change-case": "^3.0.2",
     "handlebars": "^4.0.11",
+    "mkdirp": "^0.5.1",
     "recursive-readdir": "^2.2.2",
     "yargs": "^11.0.0"
   },
@@ -16,7 +14,7 @@
     "@types/node": "^9.4.6"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "tsc & node ./dist/app.js --gitHubUrl https://github.com --name \"Demo Application\" --template 1.0.0"
   },
   "repository": {
     "type": "git",
