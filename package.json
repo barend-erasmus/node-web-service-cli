@@ -1,0 +1,31 @@
+{
+  "name": "web-service-cli",
+  "version": "1.0.0",
+  "description": "Generate Node.js Web Services (Micro, Macro, API)",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "change-case": "^3.0.2",
+    "handlebars": "^4.0.11",
+    "recursive-readdir": "^2.2.2",
+    "yargs": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^9.4.6"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/barend-erasmus/node-web-service-cli.git"
+  },
+  "author": "Barend Erasmus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/barend-erasmus/node-web-service-cli/issues"
+  },
+  "homepage": "https://github.com/barend-erasmus/node-web-service-cli#readme"
+}
