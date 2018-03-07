@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import * as changeCase from 'change-case';
 import * as fs from 'fs';
 import * as handlebars from 'handlebars';
@@ -8,69 +9,79 @@ import * as yargs from 'yargs';
 
 (async () => {
     const argv = yargs
-    .option('dest', {
-        alias: 'd',
-        description: 'Destination Directory',
-        required: true,
-        type: 'string',
-    })
+        .option('dest', {
+            alias: 'd',
+            description: 'Destination Directory',
+            required: true,
+            type: 'string',
+        })
         .option('gitHubUrl', {
-        description: 'GitHub Url',
-        required: true,
-        type: 'string',
-    })
+            description: 'GitHub Url',
+            required: true,
+            type: 'string',
+        })
         .option('name', {
-        alias: 'n',
-        description: 'Project Name',
-        required: true,
-        type: 'string',
-    })
+            alias: 'n',
+            description: 'Project Name',
+            required: true,
+            type: 'string',
+        })
         .option('template', {
-        alias: 't',
-        description: 'Template and Version',
-        required: true,
-        type: 'string',
-    })
-        .argv;
+            alias: 't',
+            description: 'Template and Version',
+            required: true,
+            type: 'string',
+        }).argv;
 
-    const templateVersion = argv.template.replace(/\./g, '-');
+    const templateVersion: string = argv.template.replace(/\./g, '-');
 
-    const displayName = argv.name;
+    const displayName: string = argv.name;
 
-    const projectName = changeCase.paramCase(displayName);
+    const projectName: string = changeCase.paramCase(displayName);
 
-    const gitHubUrl = argv.gitHubUrl;
+    const gitHubUrl: string = argv.gitHubUrl;
 
-    const absoluteDirecoryPath = path.join(__dirname, `./../src/templates/version-${templateVersion}`);
+    const absoluteDirectoryPath: string = path.join(__dirname, `./../src/templates/version-${templateVersion}`);
 
-    const destinationDirectoryPath = path.normalize(argv.dest);
+    const destinationDirectoryPath: string = path.normalize(argv.dest);
 
-    const files = await readdir(absoluteDirecoryPath);
+    console.log(chalk.white(`Creating project...`));
+    console.log(chalk.white(`    Github Url: ${gitHubUrl}`));
+    console.log(chalk.white(`    Project Name: ${displayName} (${projectName})`));
+    console.log(chalk.white(`    Template: ${templateVersion}`));
+
+    const files: string[] = await readdir(absoluteDirectoryPath);
+
+    console.log(chalk.cyan(`Template contains ${files.length} files.`));
 
     for (const file of files) {
 
-        const contents = fs.readFileSync(file, 'utf8');
+        const contents: string = fs.readFileSync(file, 'utf8');
 
-        const compiledTemplate = handlebars.compile(contents);
+        const compiledTemplate: (model: any) => string = handlebars.compile(contents);
 
-        const model = {
+        const model: any = {
             displayName,
             gitHubUrl,
             projectName,
         };
 
-        const result = compiledTemplate(model);
+        const result: string = compiledTemplate(model);
 
-        const relativePath = path.relative(absoluteDirecoryPath, file);
+        const relativePath: string = path.relative(absoluteDirectoryPath, file);
 
         const destinationFilePath: string = path.join(destinationDirectoryPath, relativePath);
 
         const destinationFileDirectoryPath: string = path.dirname(destinationFilePath);
 
         if (!fs.existsSync(destinationFileDirectoryPath)) {
-            mkdirp.sync(destinationFileDirectoryPath);
+            // mkdirp.sync(destinationFileDirectoryPath);
+            console.log(chalk.blue(`Created directory: ${destinationFileDirectoryPath}`));
         }
 
-        fs.writeFileSync(destinationFilePath, result);
+        // fs.writeFileSync(destinationFilePath, result);
+        console.log(chalk.blue(`Created file: ${destinationFilePath}`));
     }
+
+    console.log(chalk.green(`Successfully created project.`));
 })();
