@@ -1,13 +1,19 @@
-import * as yargs from 'yargs';
-import * as readdir from 'recursive-readdir';
 import * as changeCase from 'change-case';
-import * as path from 'path';
 import * as fs from 'fs';
 import * as handlebars from 'handlebars';
 import * as mkdirp from 'mkdirp';
+import * as path from 'path';
+import * as readdir from 'recursive-readdir';
+import * as yargs from 'yargs';
 
 (async () => {
     const argv = yargs
+    .option('dest', {
+        alias: 'd',
+        description: 'Destination Directory',
+        required: true,
+        type: 'string',
+    })
         .option('gitHubUrl', {
         description: 'GitHub Url',
         required: true,
@@ -37,7 +43,7 @@ import * as mkdirp from 'mkdirp';
 
     const absoluteDirecoryPath = path.join(__dirname, `./../src/templates/version-${templateVersion}`);
 
-    const destinationDirectoryPath = path.normalize(`D:/git/barend-erasmus/node-web-service-cli/test`);
+    const destinationDirectoryPath = path.normalize(argv.dest);
 
     const files = await readdir(absoluteDirecoryPath);
 
@@ -65,6 +71,6 @@ import * as mkdirp from 'mkdirp';
             mkdirp.sync(destinationFileDirectoryPath);
         }
 
-         fs.writeFileSync(destinationFilePath, result);
+        fs.writeFileSync(destinationFilePath, result);
     }
 })();
