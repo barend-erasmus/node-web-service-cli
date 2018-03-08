@@ -1,6 +1,6 @@
 {
   "name": "web-service-cli",
-  "version": "1.0.1",
+  "version": "2.0.1",
   "description": "Generate Node.js Web Services (Micro, Macro, API)",
   "main": "index.js",
   "dependencies": {
@@ -9,6 +9,8 @@
     "handlebars": "^4.0.11",
     "mkdirp": "^0.5.1",
     "recursive-readdir": "^2.2.2",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.2",
     "yargs": "^11.0.0"
   },
   "devDependencies": {
@@ -16,7 +18,8 @@
   },
   "scripts": {
     "lint": "tslint ./src/**/*.ts --fix --exclude ./src/**/*.d.ts",
-    "start": "tsc & node ./dist/app.js --gitHubUrl https://github.com --name \"Demo Application\" --template 1.0.0 --dest ./"
+    "start-lint": "tsc & node ./dist/app.js lint --directory ./",
+    "start-generate": "tsc & node ./dist/app.js generate --gitHubUrl https://github.com --name \"Demo Application\" --template 1.0.0 --dest ./"
   },
   "repository": {
     "type": "git",

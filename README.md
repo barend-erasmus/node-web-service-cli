@@ -7,11 +7,32 @@ Generate Node.js Web Services (Micro, Macro, API)
 
 ## Usage
 
-`web-service-cli --help`
+`web-service-cli generate --help`
 
-`nws-cli --help`
+`web-service-cli lint --help`
 
-## Options
+`nws-cli generate --help`
+
+`nws-cli lint --help`
+
+## Lint 
+
+### Options
+
+```
+Options:
+  --help          Show help                                            [boolean]
+  --version       Show version number                                  [boolean]
+  --directory, -d Directory                                 [string] [required]
+```
+
+### Example
+
+`web-service-cli lint --directory ./`
+
+## Generate 
+
+### Options
 
 ```
 Options:
@@ -23,6 +44,6 @@ Options:
   --template, -t  Template and Version                       [string] [required]
 ```
 
-## Example
+### Example
 
-`web-service-cli --gitHubUrl https://github.com/barend-erasmus/demo-application --name "Demo Application" --template 1.0.0 --dest ./demo-application`
+`web-service-cli generate --gitHubUrl https://github.com/barend-erasmus/demo-application --name "Demo Application" --template 1.0.0 --dest ./demo-application`

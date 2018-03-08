@@ -5,9 +5,73 @@ import * as handlebars from 'handlebars';
 import * as mkdirp from 'mkdirp';
 import * as path from 'path';
 import * as readdir from 'recursive-readdir';
+import * as tslint from 'tslint';
 import * as yargs from 'yargs';
 
 (async () => {
+    const argv = yargs.argv;
+
+    if (argv._[0] === 'lint') {
+        await lint();
+    } else if (argv._[0] === 'generate') {
+        await generate();
+    }
+})();
+
+async function lint(): Promise<void> {
+    const argv = yargs
+        .option('directory', {
+            alias: 'd',
+            description: 'Directory',
+            required: true,
+            type: 'string',
+        }).argv;
+
+    const directoryPath: string = path.normalize(argv.directory);
+
+    const linter: tslint.Linter = new tslint.Linter({
+        fix: false,
+    });
+
+    const configuration = tslint.Configuration.findConfiguration(path.join(__dirname, './../tslint.json')).results;
+
+    const files: string[] = await readdir(directoryPath);
+
+    console.log(chalk.cyan(`Found ${files.length} Files.`));
+
+    for (const file of files) {
+
+        if (path.extname(file) !== '.ts') {
+            continue;
+        }
+
+        if (file.indexOf('node_modules') > -1) {
+            continue;
+        }
+
+        const contents: string = fs.readFileSync(file, 'utf8');
+
+        linter.lint(file, contents, configuration);
+    }
+
+    const result = linter.getResult();
+
+    if (result.warningCount) {
+        console.log(chalk.yellow(`${linter.getResult().warningCount} Warnings Found.`));
+    }
+
+    if (result.errorCount) {
+        console.log(chalk.red(`${linter.getResult().errorCount} Errors Found.`));
+    }
+
+    if (!result.warningCount && !result.errorCount) {
+        console.log(chalk.green(`No Errors Found`));
+    }
+
+    console.log(chalk.magenta(result.output));
+}
+
+async function generate(): Promise<void> {
     const argv = yargs
         .option('dest', {
             alias: 'd',
@@ -52,7 +116,7 @@ import * as yargs from 'yargs';
 
     const files: string[] = await readdir(absoluteDirectoryPath);
 
-    console.log(chalk.cyan(`Template contains ${files.length} files.`));
+    console.log(chalk.cyan(`Template Contains ${files.length} Files.`));
 
     for (const file of files) {
 
@@ -76,12 +140,12 @@ import * as yargs from 'yargs';
 
         if (!fs.existsSync(destinationFileDirectoryPath)) {
             mkdirp.sync(destinationFileDirectoryPath);
-            console.log(chalk.blue(`Created directory: ${destinationFileDirectoryPath}`));
+            console.log(chalk.magenta(`Created Directory: ${destinationFileDirectoryPath}`));
         }
 
         fs.writeFileSync(destinationFilePath, result);
-        console.log(chalk.blue(`Created file: ${destinationFilePath}`));
+        console.log(chalk.magenta(`Created File: ${destinationFilePath}`));
     }
 
     console.log(chalk.green(`Successfully created project.`));
-})();
+}
