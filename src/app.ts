@@ -75,11 +75,11 @@ import * as yargs from 'yargs';
         const destinationFileDirectoryPath: string = path.dirname(destinationFilePath);
 
         if (!fs.existsSync(destinationFileDirectoryPath)) {
-            // mkdirp.sync(destinationFileDirectoryPath);
+            mkdirp.sync(destinationFileDirectoryPath);
             console.log(chalk.blue(`Created directory: ${destinationFileDirectoryPath}`));
         }
 
-        // fs.writeFileSync(destinationFilePath, result);
+        fs.writeFileSync(destinationFilePath, result);
         console.log(chalk.blue(`Created file: ${destinationFilePath}`));
     }
 
