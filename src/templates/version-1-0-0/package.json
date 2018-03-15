@@ -7,14 +7,13 @@
     "coverage": "npm run build & istanbul cover node_modules/mocha/bin/_mocha --root ./src ./dist/**/*.test.js",
     "debug": "npm run build & node --inspect ./dist/app.js --dev",
     "docs": "apidoc -i src/routes/ -o apidoc/",
-    "init": "npm run build & node ./dist/init.js --dev",
     "lint": "tslint ./src/**/*.ts --fix --exclude ./src/**/*.d.ts",
     "start": "npm run build & node ./dist/app.js --dev",
     "test": "npm run build & mocha --timeout 30000 ./dist/**/*.test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/barend-erasmus/diet-formulator-service.git"
+    "url": "git+{{gitHubUrl}}.git"
   },
   "author": "{{author}}",
   "license": "MIT",
